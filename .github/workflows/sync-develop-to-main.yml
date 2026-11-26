@@ -1,0 +1,19 @@
+name: Sync develop to main
+
+# 과제 협업용: feature PR이 develop에 머지되면(= develop에 push되면) main을 develop
+# 커밋으로 fast-forward 한다. 모든 작업이 develop을 거치므로 main은 항상 develop의
+# 조상 -> FF로 깔끔히 반영된다. 버전/릴리스 자동화 대신 이 한 파일로 충분.
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # main ref에 push
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fast-forward main to develop
+        run: git push origin HEAD:main
